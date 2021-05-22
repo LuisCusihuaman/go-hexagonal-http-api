@@ -1,0 +1,15 @@
+POST http://localhost:8080/courses
+Content-Type: application/json
+
+{
+  "id": "11d365ab-062f-4dff-9277-8474c50d8e12",
+  "name": "Certified Kubernetes Administrator (CKA) with Practice Tests",
+  "duration": "1140"
+}
+
+###### Create course
+
+GET http://localhost:8080/health
+Accept: application/json
+
+### Health
