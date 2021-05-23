@@ -4,7 +4,7 @@ const (
 	sqlCourseTable = "courses"
 )
 
-type sqlCourse struct {
+type dtoCourse struct {
 	ID       string `db:"id"`
 	Name     string `db:"name"`
 	Duration string `db:"duration"`
