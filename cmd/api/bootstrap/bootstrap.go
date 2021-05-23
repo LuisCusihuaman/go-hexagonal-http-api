@@ -3,10 +3,10 @@ package bootstrap
 import (
 	"database/sql"
 	"fmt"
-	_ "github.com/go-sql-driver/mysql"
-
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/creating"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/server"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/storage/mysql"
+	_ "github.com/go-sql-driver/mysql"
 )
 
 const (
@@ -29,6 +29,8 @@ func Run() error {
 
 	courseRepository := mysql.NewCourseRepository(db)
 
-	srv := server.New(host, port, courseRepository)
+	creatingCourseService := creating.NewCourseService(courseRepository)
+
+	srv := server.New(host, port, creatingCourseService)
 	return srv.Run()
 }
