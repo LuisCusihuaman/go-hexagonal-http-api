@@ -4,6 +4,7 @@ import (
 	"errors"
 	mooc "github.com/LuisCusihuaman/go-hexagonal-http-api/internal"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/creating"
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/kit/command"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,14 +17,17 @@ type createRequest struct {
 }
 
 // CreateHandler returns an HTTP handler for courses creation.
-func CreateHandler(creatingCourseService creating.CourseService) gin.HandlerFunc {
+func CreateHandler(commandBus command.Bus) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		var req createRequest
 		if err := ctx.BindJSON(&req); err != nil {
 			ctx.JSON(http.StatusBadRequest, err.Error())
 			return
 		}
-		err := creatingCourseService.CreateCourse(ctx, req.ID, req.Name, req.Duration)
+
+		err := commandBus.Dispatch(ctx, creating.NewCourseCommand(
+			req.ID, req.Name, req.Duration,
+		))
 
 		if err != nil {
 			switch {
