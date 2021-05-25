@@ -8,6 +8,7 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 	"testing"
+	"time"
 )
 
 func TestCourseRepository_Save_RepositoryError(t *testing.T) {
@@ -23,7 +24,7 @@ func TestCourseRepository_Save_RepositoryError(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnError(errors.New("something-failed"))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 	err = repo.Save(context.Background(), course)
 
 	assert.NoError(t, sqlMock.ExpectationsWereMet()) // on repo.Save expect same query
@@ -43,7 +44,7 @@ func Test_CourseRepository_Save_Succeed(t *testing.T) {
 		WithArgs(courseID, courseName, courseDuration).
 		WillReturnResult(sqlmock.NewResult(0, 1))
 
-	repo := NewCourseRepository(db)
+	repo := NewCourseRepository(db, 1*time.Millisecond)
 
 	err = repo.Save(context.Background(), course)
 
