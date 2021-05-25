@@ -3,6 +3,7 @@ package server
 import (
 	"context"
 	"fmt"
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/server/middleware/recovery"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/kit/command"
 	"log"
 	"net/http"
@@ -65,6 +66,8 @@ func (s *Server) Run(ctx context.Context) error {
 }
 
 func (s *Server) registerRoutes() {
+	s.engine.Use(recovery.Middleware())
+
 	s.engine.GET("/health", health.CheckHandler())
 	s.engine.POST("/courses", courses.CreateHandler(s.commandBus))
 }
