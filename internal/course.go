@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/kit/event"
 	"github.com/google/uuid"
 )
 
@@ -79,6 +80,8 @@ type Course struct {
 	id       CourseID
 	name     CourseName
 	duration CourseDuration
+
+	events []event.Event
 }
 
 // NewCourse creates a new course.
@@ -98,9 +101,13 @@ func NewCourse(id, name, duration string) (Course, error) {
 		return Course{}, err
 	}
 
-	return Course{
+	course := Course{
 		id: idVO, name: nameV0, duration: durationVO,
-	}, nil
+	}
+
+	course.Record(NewCourseCreatedEvent(idVO.String(), nameV0.String(), durationVO.String()))
+
+	return course, nil
 }
 
 // ID returns the course unique identifier.
@@ -116,6 +123,19 @@ func (c Course) Name() CourseName {
 // Duration returns the course duration.
 func (c Course) Duration() CourseDuration {
 	return c.duration
+}
+
+// Record records a new domain event.
+func (c *Course) Record(evt event.Event) {
+	c.events = append(c.events, evt)
+}
+
+// PullEvents returns all the recorded domain events and clean events store.
+func (c Course) PullEvents() []event.Event {
+	evt := c.events
+	c.events = []event.Event{}
+
+	return evt
 }
 
 //go:generate mockery --case=snake --outpkg=storagemocks --output=platform/storage/storagemocks --name=CourseRepository

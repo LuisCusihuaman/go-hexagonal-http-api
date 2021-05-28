@@ -3,18 +3,21 @@ package creating
 import (
 	"context"
 	mooc "github.com/LuisCusihuaman/go-hexagonal-http-api/internal"
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/kit/event"
 )
 
 // CourseService is the default CourseService interface
 // implementation returned by creating.NewCourseService.
 type CourseService struct {
 	courseRepository mooc.CourseRepository
+	eventBus         event.Bus
 }
 
 // NewCourseService returns the default Service interface implementation.
-func NewCourseService(courseRepository mooc.CourseRepository) CourseService {
+func NewCourseService(courseRepository mooc.CourseRepository, eventBus event.Bus) CourseService {
 	return CourseService{
 		courseRepository: courseRepository,
+		eventBus:         eventBus,
 	}
 }
 
@@ -24,5 +27,11 @@ func (s CourseService) CreateCourse(ctx context.Context, id, name, duration stri
 	if err != nil {
 		return err
 	}
-	return s.courseRepository.Save(ctx, course)
+
+	err = s.courseRepository.Save(ctx, course)
+	if err != nil {
+		return err
+	}
+
+	return s.eventBus.Publish(ctx, course.PullEvents())
 }
