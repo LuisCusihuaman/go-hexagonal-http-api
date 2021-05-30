@@ -27,3 +27,8 @@ func (_m *Bus) Publish(_a0 context.Context, _a1 []event.Event) error {
 
 	return r0
 }
+
+// Subscribe provides a mock function with given fields: _a0, _a1
+func (_m *Bus) Subscribe(_a0 event.Type, _a1 event.Handler) {
+	_m.Called(_a0, _a1)
+}
