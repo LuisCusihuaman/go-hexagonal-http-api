@@ -9,6 +9,7 @@ require (
 	github.com/google/uuid v1.2.0
 	github.com/huandu/go-assert v1.1.5
 	github.com/huandu/go-sqlbuilder v1.12.1
+	github.com/kelseyhightower/envconfig v1.4.0
 	github.com/stretchr/objx v0.1.1 // indirect
 	github.com/stretchr/testify v1.4.0
 )
