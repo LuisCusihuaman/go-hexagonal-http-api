@@ -4,7 +4,9 @@ import (
 	"context"
 	"database/sql"
 	"fmt"
+	mooc "github.com/LuisCusihuaman/go-hexagonal-http-api/internal"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/creating"
+	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/increasing"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/bus/inmemory"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/server"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/platform/storage/mysql"
@@ -36,14 +38,16 @@ func Run() error {
 		commandBus = inmemory.NewCommandBus()
 		eventBus   = inmemory.NewEventBus()
 	)
-
 	courseRepository := mysql.NewCourseRepository(db, dbTimeout)
 
 	creatingCourseService := creating.NewCourseService(courseRepository, eventBus)
-
 	createCourseCommandHandler := creating.NewCourseCommandHandler(creatingCourseService)
 
+	increasingCourseCounterService := increasing.NewCourseCounterService()
+	increaseCoursesHandler := creating.NewIncreaseCoursesCounterOnCourseCreated(increasingCourseCounterService)
+
 	commandBus.Register(creating.CourseCommandType, createCourseCommandHandler)
+	eventBus.Subscribe(mooc.CourseCreatedEventType, increaseCoursesHandler)
 
 	ctx, srv := server.New(context.Background(), host, port, shutdownTimeout, commandBus)
 	return srv.Run(ctx)
