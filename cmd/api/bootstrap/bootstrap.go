@@ -40,7 +40,7 @@ func Run() error {
 	createCourseCommandHandler := creating.NewCourseCommandHandler(creatingCourseService)
 
 	increasingCourseCounterService := increasing.NewCourseCounterService()
-	increaseCoursesHandler := creating.NewIncreaseCoursesCounterOnCourseCreated(increasingCourseCounterService)
+	increaseCoursesHandler := increasing.NewIncreaseCoursesCounterOnCourseCreated(increasingCourseCounterService)
 
 	commandBus.Register(creating.CourseCommandType, createCourseCommandHandler)
 	eventBus.Subscribe(mooc.CourseCreatedEventType, increaseCoursesHandler)

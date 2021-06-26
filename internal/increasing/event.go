@@ -1,18 +1,17 @@
-package creating
+package increasing
 
 import (
 	"context"
 	"errors"
 	mooc "github.com/LuisCusihuaman/go-hexagonal-http-api/internal"
-	"github.com/LuisCusihuaman/go-hexagonal-http-api/internal/increasing"
 	"github.com/LuisCusihuaman/go-hexagonal-http-api/kit/event"
 )
 
 type IncreaseCoursesCounterOnCourseCreated struct {
-	increasingService increasing.CourseCounterService
+	increasingService CourseCounterService
 }
 
-func NewIncreaseCoursesCounterOnCourseCreated(increaserService increasing.CourseCounterService) IncreaseCoursesCounterOnCourseCreated {
+func NewIncreaseCoursesCounterOnCourseCreated(increaserService CourseCounterService) IncreaseCoursesCounterOnCourseCreated {
 	return IncreaseCoursesCounterOnCourseCreated{increasingService: increaserService}
 }
 

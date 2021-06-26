@@ -15,7 +15,7 @@ services:
       - ./sql:/docker-entrypoint-initdb.d
       - mysql_data:/var/lib/mysql
     environment:
-      MYSQL_DATABASE: backoffice
+      MYSQL_DATA  BASE: backoffice
       MYSQL_USER: user
       MYSQL_PASSWORD: password
       MYSQL_ROOT_PASSWORD: password
