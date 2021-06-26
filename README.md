@@ -9,6 +9,8 @@ Based on the projects of the [API HTTP en Go aplicando Arquitectura Hexagonal
 ](https://pro.codely.tv/library/api-go-hexagonal/199314/about/)
 <br />
 
+![arquitecture](https://raw.githubusercontent.com/LuisCusihuaman/go-hexagonal-http-api/master/docs/hexagonal-api.png)
+
 ## 🔨 Requirements
 
 - [Go v1.15+](https://golang.org/dl/)
